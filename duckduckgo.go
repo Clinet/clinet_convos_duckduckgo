@@ -4,11 +4,16 @@ import (
 	"errors"
 
 	"github.com/Clinet/clinet_convos"
+	"github.com/Clinet/clinet_features"
 	"github.com/Clinet/clinet_storage"
 	duckduckgo "github.com/JoshuaDoes/duckduckgolang"
 )
 
-var DuckDuckGo *ClientDuckDuckGo
+var Feature = features.Feature{
+	Help: "DuckDuckGo is available as a conversation service. You can @Clinet with a question, and DuckDuckGo may answer it!",
+	Name: "duckduckgo",
+	ServiceConvo: &ClientDuckDuckGo{},
+}
 
 type ClientDuckDuckGo struct {
 	Client *duckduckgo.Client
@@ -19,14 +24,17 @@ func (ddg *ClientDuckDuckGo) Login() error {
 	if err := cfg.LoadFrom("duckduckgo"); err != nil {
 		return err
 	}
-	appName, err := cfg.ExtraGet("cfg", "appName")
+
+	appName := "Clinet"
+	rawAppName, err := cfg.ConfigGet("cfg", "appName")
 	if err != nil {
-		return err
+		cfg.ConfigSet("cfg", "appName", appName)
+	} else {
+		appName = rawAppName.(string)
 	}
-	DuckDuckGo = &ClientDuckDuckGo{
-		Client: &duckduckgo.Client{
-			AppName: appName.(string),
-		},
+
+	ddg.Client = &duckduckgo.Client{
+		AppName: appName,
 	}
 	return nil
 }
