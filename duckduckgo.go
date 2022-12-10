@@ -10,8 +10,8 @@ import (
 )
 
 var Feature = features.Feature{
-	Help: "DuckDuckGo is available as a conversation service. You can @Clinet with a question, and DuckDuckGo may answer it!",
 	Name: "duckduckgo",
+	Desc: "DuckDuckGo is available as a conversation service. You can @Clinet with a question, and DuckDuckGo may answer it!",
 	ServiceConvo: &ClientDuckDuckGo{},
 }
 
